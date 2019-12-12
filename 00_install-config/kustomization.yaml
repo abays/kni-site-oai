@@ -1,5 +1,5 @@
 bases:
-- file:///something
+- git::https://github.com/abays/blueprint-pae-4.3.git//profiles/production.baremetal/00_install-config
 
 patches:
 - install-config.yaml

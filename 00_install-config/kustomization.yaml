@@ -1,0 +1,15 @@
+bases:
+- file:///something
+
+patches:
+- install-config.yaml
+
+patchesJson6902:
+- target:
+    version: v1
+    kind: InstallConfig
+    name: cluster
+  path: install-config.name.patch.yaml
+
+transformers:
+- site-config.yaml

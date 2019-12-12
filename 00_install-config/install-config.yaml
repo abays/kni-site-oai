@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: InstallConfig
+baseDomain: oai.testing
+compute:
+ - name: worker
+   replicas: 1
+controlPlane:
+   name: master
+   platform: {}
+   replicas: 1
+metadata:
+   name: cluster
+networking:
+  clusterNetworks:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+   none: {}
+   apiVIP: 192.168.111.5
+   ingressVIP: 192.168.111.4
+   dnsVIP: 192.168.111.3
+   hosts:
+      # Master nodes are always RHCOS
+      -  name: master-0
+         role: master
+         bmc:
+            address: ipmi://10.19.110.16
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 0c:c4:7a:db:af:03  # provisioning network mac
+         sdnMacAddress: 0c:c4:7a:8e:ee:0c   # baremetal network mac
+         # sdnIPAddress: 192.168.111.11     # Optional -- Set static IP
+         hardwareProfile: default
+         osProfile: 
+            # With role == master, the osType is always rhcos
+            # And with type rhcos, the following are settings are available
+            pxe: bios         # pxe boot type either bios (default if not specified) or uefi
+            install_dev: sda  # where to install the operating system (sda is the default)
+
+      # Worker nodes can be either rhcos (default) || centos (7.x) || rhel (8.x)
+      -  name: worker-0
+         role: worker
+         bmc: 
+            address: ipmi://10.19.110.14
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 0c:c4:7a:db:a9:af
+         sdnMacAddress: 0c:c4:7a:8e:ec:e8
+         hardwareProfile: default
+      -  name: worker-1
+         role: worker
+         bmc: 
+            address: ipmi://10.19.110.18
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 0c:c4:7a:db:a9:ab
+         sdnMacAddress: 0c:c4:7a:8e:ed:c8
+         hardwareProfile: default
+
+pullSecret: 'PULL_SECRET'
+sshKey: |
+   SSH_PUB_KEY

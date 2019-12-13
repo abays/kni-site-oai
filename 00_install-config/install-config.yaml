@@ -3,7 +3,7 @@ kind: InstallConfig
 baseDomain: oai.testing
 compute:
  - name: worker
-   replicas: 1
+   replicas: 2
 controlPlane:
    name: master
    platform: {}
